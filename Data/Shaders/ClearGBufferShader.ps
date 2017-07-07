@@ -1,0 +1,40 @@
+////////////////////////////////////////////////////////
+// A pixel shader that clears deferred rendering buffers
+////////////////////////////////////////////////////////
+
+
+// ---------------- Structs -----------------
+
+// Pixel shader input
+struct PixelShaderInput
+{
+	float4 myPosition 	: SV_POSITION;
+	float2 myTexCoords  : TEXCOORD0;
+};
+
+// Pixel shader output
+struct PixelShaderOutput
+{
+	float4 myColour : SV_TARGET0;
+	float4 myNormal : SV_TARGET1;
+	float  myDepth  : SV_TARGET2;
+};
+
+
+// ----------------- Shader ------------------
+
+// Sets the output of each target to a default value
+PixelShaderOutput PS( PixelShaderInput anInput )
+{
+	PixelShaderOutput output;
+	
+	// Background colour
+	output.myColour = float4( 0.0f, 0.0f, 0.0f, 0.0f );
+	
+	// Normal (when transforming 0.5f in to screen coordinates this will give us 0.0f
+	output.myNormal = float4( 0.5f, 0.5f, 0.5f, 0.0f );
+	
+	output.myDepth = 1.0f;
+	
+	return output;
+}

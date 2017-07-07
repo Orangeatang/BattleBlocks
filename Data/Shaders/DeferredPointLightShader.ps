@@ -1,0 +1,78 @@
+//////////////////////////////////////////////////////
+// A pixel shader that renders point light information
+//////////////////////////////////////////////////////
+
+
+// ---------------- Constants ---------------
+
+cbuffer LightingBuffer
+{
+	float3 aLightPosition;
+	float  aLightRadius;
+	float3 aLightColour;
+	float  aLightIntensity;
+	matrix anInverseViewProjection;
+};
+
+
+// ---------------- Structs -----------------
+
+// Pixel shader input
+struct PixelShaderInput
+{
+	float4 myPosition 		: SV_POSITION;
+	float4 myScreenPosition : TEXCOORD0;
+};
+
+
+// ---------------- Samplers -----------------
+
+Texture2D NormalMap : register( t0 );
+SamplerState NormalSampler;
+
+Texture2D DepthMap : register( t1 );
+SamplerState DepthSampler;
+
+
+// ----------------- Shader ------------------
+
+// Calculates the colour of the current pixel based on the point light constants
+// and the colour, normal & depth textures
+float4 PS( PixelShaderInput anInput ) : SV_TARGET
+{
+	// Get the screen position
+	anInput.myScreenPosition.xy /= anInput.myScreenPosition.w;
+	
+	// Calculate the texture coordinates, put them in the range [0,1]*[0,1]
+	float2 textureCoords = 0.5f * (float2(anInput.myScreenPosition.x, -anInput.myScreenPosition.y) + 1);
+	
+	// Get the normal data for the current pixel (from the g-buffer)
+	// Transform the value back in to the [-1,1] range
+	float4 normalData    = NormalMap.Sample( NormalSampler, textureCoords );
+	float3 currentNormal = 2.0f * normalData.xyz - 1.0f;
+	
+	// Get the depth value of the current pixel (from the g-buffer)
+	float currentDepth = DepthMap.Sample( DepthSampler, textureCoords ).r;
+	
+	// Build the screen space position of the sphere's current pixel
+	float4 currentPosition;
+	currentPosition.xy = anInput.myScreenPosition.xy;
+	currentPosition.z  = currentDepth;
+	currentPosition.w  = 1.0f;
+	
+	// Transform the screen space position in to world space
+	currentPosition = mul( currentPosition, anInverseViewProjection );
+	currentPosition /= currentPosition.w;
+	
+	// Calculate the attenuation by working out how far away from the light the current pixel is
+	float3 lightVector = aLightPosition - currentPosition;
+	float  attenuation = saturate( 1.0f - length(lightVector)/aLightRadius );
+	
+	// Calculate the diffuse light by looking at the dot product of the normal at the current pixel and the 
+	// direction of the light source
+	lightVector         = normalize( lightVector );
+	float  nDL          = dot(currentNormal, lightVector);
+	float3 diffuseLight = nDL * aLightColour.xyz; 
+	
+	return attenuation * aLightIntensity * float4(diffuseLight.rgb, 1.0f);
+}

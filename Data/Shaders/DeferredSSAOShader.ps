@@ -1,0 +1,128 @@
+//////////////////////////////////////////////////////////////////////////////
+// A pixel shader that calculates deferred SSAO ambient lighting contributions
+//////////////////////////////////////////////////////////////////////////////
+
+
+// ---------------- Structs -----------------
+
+// Pixel shader input
+struct PixelShaderInput
+{
+	float4 myPosition 	: SV_POSITION;
+	float2 myTexCoords 	: TEXCOORD0;
+};
+
+
+// ---------------- Defines -----------------
+
+#define RANDOM_TEXTURE_SIZE float2(64.0f, 64.0f)
+
+
+// --------------- Constants ----------------
+
+// Lighting constants
+cbuffer Constants
+{
+	float2	ourScreenDimensions;
+	matrix 	ourView;
+	matrix 	ourInverseProjection;
+};
+
+
+// ---------------- Samplers -----------------
+
+Texture2D NormalMap : register( t0 );
+SamplerState NormalSampler;
+
+Texture2D DepthMap : register( t1 );
+SamplerState DepthSampler;
+
+Texture2D RandomNormalMap : register( t2 );
+SamplerState RandomNormalSampler;
+
+
+// --------------- Functions ----------------
+
+// Given the supplied texture coordinates, this function will use the depth map and inverse view projection
+// matrix to construct a world-space position
+float4 CalculateViewSpacePosition( float2 someTextureCoords )
+{
+	// Get the depth value
+	float currentDepth = DepthMap.Sample( DepthSampler, someTextureCoords ).r;
+	
+	// Calculate the screen-space position
+	float4 currentPosition;
+	currentPosition.x = someTextureCoords.x * 2.0f - 1.0f;
+	currentPosition.y = -(someTextureCoords.y * 2.0f - 1.0f);
+	currentPosition.z = currentDepth;
+	currentPosition.w = 1.0f;
+	
+	// Transform the screen space position in to view-space
+	currentPosition = mul( currentPosition, ourInverseProjection );
+	currentPosition /= currentPosition.w;
+
+	return currentPosition;
+}
+
+// Reads in normal data using the supplied texture coordinates - need to convert the normal in to view space as well (they're currently in screen-space)
+float3 GetCurrentNormal( float2 someTextureCoords )
+{
+	// Get the normal data for the current point
+	float3 normalData = NormalMap.Sample(NormalSampler, someTextureCoords).xyz;
+	
+	// Transform the normal back in to world space
+	normalData = normalData * 2.0f - 1.0f;
+	
+	// Convert to view-space
+	normalData = mul( normalData, ourView );
+	
+	return normalize(normalData);
+}
+
+// Selects a random normal from the shader's random texture
+float2 GetRandomNormal( float2 someTextureCoords )
+{
+	float2 normal = RandomNormalMap.Sample( RandomNormalSampler, ourScreenDimensions * someTextureCoords / RANDOM_TEXTURE_SIZE ).xy * 2.0f - 1.0f;
+	return normalize( normal );
+}
+
+// Calculates an ambient occlusion sample by looking at the depth of pixels around the current position
+float CalculateAmbientOcclusion( float2 someTexCoords, float2 aSampleOffset, float3 aPosition, float3 aNormal )
+{
+	// need to convert aSampleOffset in to screen-space for the texture lookup to work
+	float3 difference  = CalculateViewSpacePosition( someTexCoords + aSampleOffset ).xyz - aPosition;
+	float3 nDifference = normalize( difference );
+	float  distance    = length(difference) * 1.0f; // 1.0f is the scale
+	
+	return max( 0.0f, dot(aNormal, nDifference) - 0.001f ) * (1.0f / (1.0f + distance)) * 1.0f; // 0.001f is the g_bias, * 1.0f at the end is the intensity
+}
+
+
+// ---------------- Shader ------------------
+
+// Pixel shader that calculates ambient occlusion
+float4 PS( PixelShaderInput anInput ) : SV_TARGET
+{
+	float3 currentPosition 	= CalculateViewSpacePosition( anInput.myTexCoords ).xyz;
+	float3 currentNormal   	= GetCurrentNormal( anInput.myTexCoords );
+	float2 randomNormal 	= GetRandomNormal( anInput.myTexCoords );
+
+	float 			ambientFactor 	= 0.0f;
+	float 			radius 			= 1.0f / currentPosition.z; // 1.0f is the sample radius value
+	const float2 	vec[4]			= { float2(1,0), float2(-1,0), float2(0,1), float2(0,-1) };
+	
+	for( int i = 0; i < 4; i++ )
+	{
+		float2 coord1 = reflect( vec[i], randomNormal ) * radius;
+		float2 coord2 = float2( coord1.x * 0.707f - coord1.y * 0.707f, coord1.x * 0.707f + coord1.y * 0.707f );
+		
+		ambientFactor += CalculateAmbientOcclusion( anInput.myTexCoords, coord1 * 0.25f, currentPosition, currentNormal );
+		ambientFactor += CalculateAmbientOcclusion( anInput.myTexCoords, coord2 * 0.5f, currentPosition, currentNormal );
+		ambientFactor += CalculateAmbientOcclusion( anInput.myTexCoords, coord1 * 0.75f, currentPosition, currentNormal );
+		ambientFactor += CalculateAmbientOcclusion( anInput.myTexCoords, coord2, currentPosition, currentNormal );
+	}
+	
+	ambientFactor /= 16.0f; // iterations * 4 (for each ambient factor calculated)
+	
+	return float4( 1.0f - ambientFactor, 1.0f - ambientFactor, 1.0f - ambientFactor, 1.0f );
+}

@@ -1,0 +1,47 @@
+////////////////////////////////////////////////////////////////////
+// A pixel shader that is used to blend a deferred lighting buffer
+// with the colour buffer
+////////////////////////////////////////////////////////////////////
+
+
+// ---------------- Structs -----------------
+
+// Pixel shader input
+struct PixelShaderInput
+{
+	float4 myPosition 	: SV_POSITION;
+	float2 myTexCoords 	: TEXCOORD0;
+};
+
+// ---------------- Constants ---------------
+
+// Lighting constants
+cbuffer LightingBuffer
+{
+	float4	myAmbientLight;
+};
+
+
+// ---------------- Samplers ---------------
+
+Texture2D ColourMap : register( t0 );
+SamplerState ColourSampler;
+
+Texture2D LightMap : register( t1 );
+SamplerState LightSampler;
+
+Texture2D SSAOMap : register( t2 );
+SamplerState SSAOSampler;
+
+
+// ----------------- Shader ------------------
+
+// Blends the colour buffer with the lighting buffer
+float4 PS( PixelShaderInput anInput ) : SV_TARGET
+{
+	float3 diffuseColour 	= ColourMap.Sample( ColourSampler, anInput.myTexCoords ).xyz;
+	float4 lightColour 		= LightMap.Sample( LightSampler, anInput.myTexCoords );
+	float4 ssaoColour 		= SSAOMap.Sample( SSAOSampler, anInput.myTexCoords );
+	
+	return saturate( float4( diffuseColour, 1.0f ) * (lightColour + (myAmbientLight * ssaoColour)) );
+}

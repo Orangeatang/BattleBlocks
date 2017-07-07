@@ -1,0 +1,166 @@
+//////////////////////////////////////////////////////
+// A pixel shader that renders spot light information
+//////////////////////////////////////////////////////
+
+
+// ---------------- Defines -----------------
+
+#define TEXEL_SIZE 1.0f / 1024.0f
+
+
+// ---------------- Constants ---------------
+
+cbuffer LightingBuffer
+{
+	float3 aLightPosition;
+	float  aLightRadius;
+	float3 aLightColour;
+	float  aLightDecay;
+	float3 aLightDirection;
+	float  aLightConeAngle;
+	float  anApplyShadows;
+	matrix anInverseViewProjection;
+	matrix aLightViewProjection;
+};
+
+
+// ---------------- Structs -----------------
+
+// Pixel shader input
+struct PixelShaderInput
+{
+	float4 myPosition 		: SV_POSITION;
+	float4 myScreenPosition : TEXCOORD0;
+};
+
+
+// ---------------- Samplers -----------------
+
+Texture2D NormalMap : register( t0 );
+SamplerState NormalSampler;
+
+Texture2D DepthMap : register( t1 );
+SamplerState DepthSampler;
+
+Texture2D ShadowMap : register( t2 );
+SamplerState ShadowSampler;
+
+
+// ----------------- Shader ------------------
+
+// Uses percentage closer filtering to calculate the depth of the shadow map at the current pixel... samples
+// the pixels around the current pixel and returns the average - helps to smooth things out
+float SampleShadowMapPCF( float2 someTextureCoords, float aPixelDepth )
+{
+	// create an array of texture coordinates to sample around the current pixel
+	float2 textureCoords[9];	
+	textureCoords[0] = someTextureCoords;
+	textureCoords[1] = someTextureCoords + float2( -TEXEL_SIZE, 0.0f );
+	textureCoords[2] = someTextureCoords + float2( TEXEL_SIZE, 0.0f );
+	textureCoords[3] = someTextureCoords + float2( 0.0f, -TEXEL_SIZE );
+	textureCoords[4] = someTextureCoords + float2( 0.0f, TEXEL_SIZE );
+	textureCoords[5] = someTextureCoords + float2( -TEXEL_SIZE, -TEXEL_SIZE );
+	textureCoords[6] = someTextureCoords + float2( TEXEL_SIZE, -TEXEL_SIZE );
+	textureCoords[7] = someTextureCoords + float2( -TEXEL_SIZE, TEXEL_SIZE );
+	textureCoords[8] = someTextureCoords + float2( TEXEL_SIZE, TEXEL_SIZE );
+
+	// compute the average value of the nine samples
+	float finalValue = 0.0f;
+	for( int i = 0; i < 9; i++ )
+	{
+		float currentValue = ShadowMap.Sample( ShadowSampler, textureCoords[i] ).r;
+		currentValue = currentValue < aPixelDepth ? 0.0f : 1.0f;
+		finalValue += currentValue;
+	}	
+	finalValue /= 9.0f;
+	
+	return finalValue;
+}
+
+// Determins whether the current pixel is in shadow, and returns the appropriate colour
+float4 CalculateShadowColour( float4 aPosition, float aLightIntensity )
+{
+	// Transform the world space position in to light space, compare depth values
+	float4 lightScreenPosition 	= mul( aPosition, aLightViewProjection );
+	lightScreenPosition.xyz 	/= lightScreenPosition.w;
+	
+	// Calculate the light texture coordinates (don't forget to flip the y-coordinate to keep it in the range [0 - 1])
+	float2 lightTexCoords;
+	lightTexCoords.x =  lightScreenPosition.x / 2.0f + 0.5f;
+	lightTexCoords.y =  -lightScreenPosition.y / 2.0f + 0.5f;
+	
+	// Calculate the depth of the light, applying a bias to prevent z-fighting
+	float lightDepthValue = lightScreenPosition.z;
+	lightDepthValue 	  = lightDepthValue - 0.001f;
+	
+	// Sample the shadow map depth value from the depth texture using the sampler at the projected texture coordinate location.
+	float depthValue = SampleShadowMapPCF( lightTexCoords, lightDepthValue );
+	
+	// Compare the depth of the shadow map value and the depth of the light to determine whether to shadow or to light this pixel.
+	// If the light is in front of the object then light the pixel, if not then shadow this pixel since an object (occluder) is casting a shadow on it.
+	if( lightDepthValue < depthValue )
+	{	
+		// Return the light colour
+		return saturate( float4( aLightColour.xyz, 1.0f) * aLightIntensity );
+	}
+	
+	return float4( 0.0f, 0.0f, 0.0f, 1.0f );
+}
+
+
+// Calculates the colour of the current pixel based on the point light constants
+// and the colour, normal & depth textures
+float4 PS( PixelShaderInput anInput ) : SV_TARGET
+{
+	// Get the screen position
+	anInput.myScreenPosition.xy /= anInput.myScreenPosition.w;
+	
+	// Calculate the texture coordinates, put them in the range [0,1]*[0,1]
+	float2 textureCoords = 0.5f * (float2(anInput.myScreenPosition.x, -anInput.myScreenPosition.y) + 1);
+	
+	// Get the normal data for the current pixel (from the g-buffer)
+	// Transform the value back in to the [-1,1] range
+	float4 normalData    = NormalMap.Sample( NormalSampler, textureCoords );
+	float3 currentNormal = 2.0f * normalData.xyz - 1.0f;
+	
+	// Get the depth value of the current pixel (from the g-buffer)
+	float currentDepth = DepthMap.Sample( DepthSampler, textureCoords ).r;
+	
+	// Calculate the screen space position of the sphere's current pixel
+	float4 currentPosition;
+	currentPosition.xy = anInput.myScreenPosition.xy;
+	currentPosition.z  = currentDepth;
+	currentPosition.w  = 1.0f;
+	
+	// Transform the screen space position in to world space
+	currentPosition = mul( currentPosition, anInverseViewProjection );
+	currentPosition /= currentPosition.w;
+	
+	// Calculate the attenuation by working out how far away from the light the current pixel is
+	float3 lightVector = aLightPosition - currentPosition;
+	float  attenuation = saturate( 1.0f - length(lightVector)/aLightRadius );
+	
+	// Calculate the spot light intensity
+	float lightIntensity = dot( aLightDirection, -lightVector );
+	if( lightIntensity > aLightConeAngle )
+	{			
+		// Calculate the diffuse light by looking at the dot product of the normal at the current pixel and the 
+		// direction of the light source	
+		lightVector 				= normalize( lightVector );
+		float  nDL          		= dot(currentNormal, lightVector);
+		float spotLightIntensity 	= pow( lightIntensity, aLightDecay );
+		
+		// If required apply the shadow map
+		if( anApplyShadows == 1.0f  )
+		{
+			float4 lightColour = CalculateShadowColour( currentPosition, nDL );
+			return attenuation * spotLightIntensity * lightColour;
+		}
+		
+		// Otherwise use a standard spot light colour calculation
+		float3 diffuseLight = nDL * aLightColour.xyz;
+		return attenuation * spotLightIntensity * float4( diffuseLight, 1.0f );
+	}
+	
+	return float4( 0.0f, 0.0f, 0.0f, 1.0f ); 
+}

@@ -1,0 +1,8 @@
+* Voxel engine
+* Randomly generated arenas
+* Ability to create your own arenas
+* Fun battle mechanics
+	- fully customizable combos
+	- weapon builder
+* Fully networked
+* Good visual effects

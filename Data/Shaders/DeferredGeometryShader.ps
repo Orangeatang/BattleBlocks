@@ -1,0 +1,43 @@
+////////////////////////////////////////////////////////////////////////////////
+// A pixel shader that renders voxel chunk data to three separate render targets
+////////////////////////////////////////////////////////////////////////////////
+
+
+// ---------------- Structs -----------------
+
+// Pixel shader input
+struct PixelShaderInput
+{
+	float4 myPosition 	: SV_POSITION;
+	float4 myColour 	: TEXCOORD0;
+	float3 myNormal		: TEXCOORD1;
+	float3 myDepth		: TEXCOORD2;
+};
+
+// Pixel shader output
+struct PixelShaderOutput
+{
+	float4 myColour : SV_TARGET0;
+	float4 myNormal : SV_TARGET1;
+	float  myDepth  : SV_TARGET2;
+};
+
+
+// ----------------- Shader ------------------
+
+// Just returns the colour
+PixelShaderOutput PS( PixelShaderInput anInput )
+{
+	PixelShaderOutput output;
+	
+	// Keep the colour the same
+	output.myColour = anInput.myColour;
+	
+	// Transform the domain of the normal to screen space
+	output.myNormal.xyz = 0.5f * (normalize(anInput.myNormal) + 1.0f);
+	
+	// Depth
+	output.myDepth = anInput.myDepth.x / anInput.myDepth.y;
+	
+	return output;
+}

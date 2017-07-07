@@ -1,0 +1,147 @@
+////////////////////////////////////////////////////////////////////////////////////////////////
+// A pixel shader that calculates per-pixel directional lighting, rendering to a lighting buffer
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// ---------------- Defines -----------------
+
+#define TEXEL_SIZE 1.0f / 1024.0f
+
+
+// ---------------- Structs -----------------
+
+// Pixel shader input
+struct PixelShaderInput
+{
+	float4 myPosition 	: SV_POSITION;
+	float2 myTexCoords 	: TEXCOORD0;
+};
+
+
+// ---------------- Constants ---------------
+
+// Lighting constants
+cbuffer LightingBuffer
+{
+	float3	myLightDirection;
+	float	myApplyShadows;
+	float4	myLightColour;
+	float3	myCameraPosition;
+	matrix 	myInverseViewProjection;
+	matrix  myLightViewProjection;
+};
+
+
+// ---------------- Samplers -----------------
+
+Texture2D NormalMap : register( t0 );
+SamplerState NormalSampler;
+
+Texture2D DepthMap : register( t1 );
+SamplerState DepthSampler;
+
+Texture2D ShadowMap : register( t2 );
+SamplerState ShadowSampler;
+
+
+// ----------------- Shader ------------------
+
+// Uses percentage closer filtering to calculate the depth of the shadow map at the current pixel... samples
+// the pixels around the current pixel and returns the average - helps to smooth things out
+float SampleShadowMapPCF( float2 someTextureCoords, float aPixelDepth )
+{
+	// create an array of texture coordinates to sample around the current pixel
+	float2 textureCoords[9];	
+	textureCoords[0] = someTextureCoords;
+	textureCoords[1] = someTextureCoords + float2( -TEXEL_SIZE, 0.0f );
+	textureCoords[2] = someTextureCoords + float2( TEXEL_SIZE, 0.0f );
+	textureCoords[3] = someTextureCoords + float2( 0.0f, -TEXEL_SIZE );
+	textureCoords[4] = someTextureCoords + float2( 0.0f, TEXEL_SIZE );
+	textureCoords[5] = someTextureCoords + float2( -TEXEL_SIZE, -TEXEL_SIZE );
+	textureCoords[6] = someTextureCoords + float2( TEXEL_SIZE, -TEXEL_SIZE );
+	textureCoords[7] = someTextureCoords + float2( -TEXEL_SIZE, TEXEL_SIZE );
+	textureCoords[8] = someTextureCoords + float2( TEXEL_SIZE, TEXEL_SIZE );
+
+	// compute the average value of the nine samples
+	float finalValue = 0.0f;
+	for( int i = 0; i < 9; i++ )
+	{
+		float currentValue = ShadowMap.Sample( ShadowSampler, textureCoords[i] ).r;
+		currentValue = currentValue < aPixelDepth ? 0.0f : 1.0f;
+		finalValue += currentValue;
+	}	
+	finalValue /= 9.0f;
+	
+	return finalValue;
+}
+
+
+// Compares the depth of the current vertex (converted in to light space) with the depth in the 
+// shadow map to work out whether the current pixel is in shadow.
+float4 CalculateShadowedColour( float2 someTexCoords, float aLightIntensity )
+{
+	// Get the depth value
+	float currentDepth = DepthMap.Sample( DepthSampler, someTexCoords ).r;
+	
+	// Calculate the screen-space position
+	float4 currentPosition;
+	currentPosition.x = someTexCoords.x * 2.0f - 1.0f;
+	currentPosition.y = -(someTexCoords.y * 2.0f - 1.0f);
+	currentPosition.z = currentDepth;
+	currentPosition.w = 1.0f;
+	
+	// Transform the screen space position in to world-space
+	currentPosition = mul( currentPosition, myInverseViewProjection );
+	currentPosition /= currentPosition.w;
+	
+	// Transform the world space position in to light space, compare depth values
+	float4 lightScreenPosition 	= mul( currentPosition, myLightViewProjection );
+	lightScreenPosition.xyz 	/= lightScreenPosition.w;
+	
+	// Calculate the light texture coordinates (don't forget to flip the y-coordinate to keep it in the range [0 - 1])
+	float2 lightTexCoords;
+	lightTexCoords.x =  lightScreenPosition.x / 2.0f + 0.5f;
+	lightTexCoords.y =  -lightScreenPosition.y / 2.0f + 0.5f;
+	
+	// Calculate the depth of the light, applying a bias to prevent z-fighting
+	float lightDepthValue = lightScreenPosition.z;
+	lightDepthValue 	  = lightDepthValue - 0.001f;
+	
+	// Sample the shadow map depth value from the depth texture using the sampler at the projected texture coordinate location.
+	float depthValue = SampleShadowMapPCF( lightTexCoords, lightDepthValue );
+	
+	// Compare the depth of the shadow map value and the depth of the light to determine whether to shadow or to light this pixel.
+	// If the light is in front of the object then light the pixel, if not then shadow this pixel since an object (occluder) is casting a shadow on it.
+	if( lightDepthValue < depthValue )
+	{	
+		// Return the light colour
+		return saturate( float4( myLightColour.xyz, 1.0f)  * aLightIntensity );
+	}
+	
+	return  float4( 0.0f, 0.0f, 0.0f, 1.0f );
+}
+
+
+// Calculates the colour of the current pixel based on the directional light constants
+// and the colour, normal & depth textures
+float4 PS( PixelShaderInput anInput ) : SV_TARGET
+{ 
+	// Get the normal data out of the normal map
+	float4 normalData = NormalMap.Sample( NormalSampler, anInput.myTexCoords );
+	
+	// Transform the normal back in to [-1,1] range
+	float3 currentNormal = 2.0f * normalData.xyz - 1.0f;
+
+	// Calculate the diffuse light, given a light intensity
+	float3 currentLightVector 	= -normalize( myLightDirection );
+	float lightIntensity 		= max( 0, dot(currentNormal, currentLightVector) );
+	
+	// If the directional light is supposed to cast shadows...
+	if( myApplyShadows == 1.0f )
+	{
+		return CalculateShadowedColour( anInput.myTexCoords, lightIntensity );
+	}
+	
+	// Otherwise just multiply the ambient ligth by the light colour and the light intensity
+	return saturate( float4(myLightColour.xyz, 1.0f) * lightIntensity );
+}

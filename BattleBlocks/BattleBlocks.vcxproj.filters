@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Stdafx.cpp" />
+    <ClCompile Include="BattleBlocksGame.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="LocalPlayer.cpp">
+      <Filter>Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemInputProcessor.cpp">
+      <Filter>Game\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerInputComponent.cpp">
+      <Filter>Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerCameraComponent.cpp">
+      <Filter>Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerPhysicsComponent.cpp">
+      <Filter>Game\Components</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Stdafx.h" />
+    <ClInclude Include="BattleBlocksGame.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="LocalPlayer.h">
+      <Filter>Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemInputProcessor.h">
+      <Filter>Game\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInputComponent.h">
+      <Filter>Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>Game\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerCameraComponent.h">
+      <Filter>Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerPhysicsComponent.h">
+      <Filter>Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveEventMessage.h">
+      <Filter>Game\Components\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseMoveMessage.h">
+      <Filter>Game\Components\Messages</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Game">
+      <UniqueIdentifier>{708d9f88-3b7e-4b03-8f43-acdcb23df365}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Input">
+      <UniqueIdentifier>{651c3e6a-2e5a-4e5b-8409-5b8d4c1e4e6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player">
+      <UniqueIdentifier>{fb7e5a3e-0958-4fac-a47f-f83a459c6761}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Components">
+      <UniqueIdentifier>{182bea07-44d8-4a05-a506-14f38e2ba104}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Common">
+      <UniqueIdentifier>{5e04dc5a-0122-42fc-b78f-b9d572beb168}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Components\Messages">
+      <UniqueIdentifier>{18e99888-1197-409f-951b-aa6fd8312fc9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

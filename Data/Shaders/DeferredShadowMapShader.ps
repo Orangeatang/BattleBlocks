@@ -1,0 +1,26 @@
+//////////////////////////////////////////////////////
+// A pixel shader that renders depth from the perspective 
+// of the camera
+//////////////////////////////////////////////////////
+
+
+// ---------------- Structs -----------------
+
+// Pixel shader input
+struct PixelShaderInput
+{
+	float4 myPosition  		: SV_POSITION;
+	float4 myDepthPosition  : TEXCOORD0;
+};
+
+
+// ----------------- Shader ------------------
+
+// Outputs whether the current pixel is in shadow, based on the current light 
+// transform matrix
+float4 PS( PixelShaderInput anInput ) : SV_TARGET
+{
+	float depth = anInput.myDepthPosition.z / anInput.myDepthPosition.w;
+	
+	return float4( depth, depth, depth, 1.0f );
+}

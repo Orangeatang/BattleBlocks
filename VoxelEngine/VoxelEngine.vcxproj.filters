@@ -1,0 +1,307 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="VoxelEngine.h" />
+    <ClInclude Include="Stdafx.h" />
+    <ClInclude Include="VEVoxel.h">
+      <Filter>Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="VEShader.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="VEChunk.h">
+      <Filter>Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="VEDirectXInterface.h">
+      <Filter>Rendering\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="VEVoxelShader.h">
+      <Filter>Rendering\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="VEDirectXInput.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="VEBasicCamera.h">
+      <Filter>Rendering\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="VEFirstPersonCamera.h">
+      <Filter>Rendering\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="VEFreeCamera.h">
+      <Filter>Rendering\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="VELightingManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="VEChunkManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="noiseutils.h">
+      <Filter>External\LibNoise</Filter>
+    </ClInclude>
+    <ClInclude Include="VETerrainGenerator.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="VEChunkData.h">
+      <Filter>Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="VETypes.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="VEThreadManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="VEQuadRenderer.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="VERenderManager.h">
+      <Filter>Rendering\RenderManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="VEDeferredRenderManager.h">
+      <Filter>Rendering\RenderManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="VEVoxelRenderManager.h">
+      <Filter>Rendering\RenderManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="VEDirectionalLight.h">
+      <Filter>Rendering\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="VELight.h">
+      <Filter>Rendering\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="VEPointLight.h">
+      <Filter>Rendering\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="VESphere.h">
+      <Filter>Rendering\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="VESpotLight.h">
+      <Filter>Rendering\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="VEDirectionalLightShader.h">
+      <Filter>Rendering\Shaders\Deferred Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="VEFinalBlendShader.h">
+      <Filter>Rendering\Shaders\Deferred Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="VEGeometryShader.h">
+      <Filter>Rendering\Shaders\Deferred Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="VEPointLightShader.h">
+      <Filter>Rendering\Shaders\Deferred Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="VESpotLightShader.h">
+      <Filter>Rendering\Shaders\Deferred Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="VEShadowMapShader.h">
+      <Filter>Rendering\Shaders\Deferred Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="VEClearGBufferShader.h">
+      <Filter>Rendering\Shaders\Deferred Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="VESSAOShader.h">
+      <Filter>Rendering\Shaders\Deferred Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="VEShaderManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="VETextureManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="VEPhysicsService.h">
+      <Filter>Services</Filter>
+    </ClInclude>
+    <ClInclude Include="VEObject.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="VEObjectComponent.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="VEPhysicsComponent.h">
+      <Filter>Objects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="VEComponentMessage.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="VEObjectService.h">
+      <Filter>Services</Filter>
+    </ClInclude>
+    <ClInclude Include="VESmartPointer.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="VoxelEngine.cpp" />
+    <ClCompile Include="Stdafx.cpp" />
+    <ClCompile Include="VEVoxel.cpp">
+      <Filter>Voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="VEShader.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="VEChunk.cpp">
+      <Filter>Voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="VEDirectXInterface.cpp">
+      <Filter>Rendering\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="VEVoxelShader.cpp">
+      <Filter>Rendering\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="VEDirectXInput.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="VEBasicCamera.cpp">
+      <Filter>Rendering\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="VEFirstPersonCamera.cpp">
+      <Filter>Rendering\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="VEFreeCamera.cpp">
+      <Filter>Rendering\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="VELightingManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="VEChunkManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="noiseutils.cpp">
+      <Filter>External\LibNoise</Filter>
+    </ClCompile>
+    <ClCompile Include="VETerrainGenerator.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="VEChunkData.cpp">
+      <Filter>Voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="VEThreadManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="VEQuadRenderer.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="VEDeferredRenderManager.cpp">
+      <Filter>Rendering\RenderManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="VEVoxelRenderManager.cpp">
+      <Filter>Rendering\RenderManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="VEDirectionalLight.cpp">
+      <Filter>Rendering\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="VEPointLight.cpp">
+      <Filter>Rendering\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="VESphere.cpp">
+      <Filter>Rendering\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="VESpotLight.cpp">
+      <Filter>Rendering\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="VEDirectionalLightShader.cpp">
+      <Filter>Rendering\Shaders\Deferred Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="VEFinalBlendShader.cpp">
+      <Filter>Rendering\Shaders\Deferred Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="VEGeometryShader.cpp">
+      <Filter>Rendering\Shaders\Deferred Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="VEPointLightShader.cpp">
+      <Filter>Rendering\Shaders\Deferred Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="VESpotLightShader.cpp">
+      <Filter>Rendering\Shaders\Deferred Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="VEShadowMapShader.cpp">
+      <Filter>Rendering\Shaders\Deferred Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="VEClearGBufferShader.cpp">
+      <Filter>Rendering\Shaders\Deferred Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="VESSAOShader.cpp">
+      <Filter>Rendering\Shaders\Deferred Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="VEShaderManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="VETextureManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="VEPhysicsService.cpp">
+      <Filter>Services</Filter>
+    </ClCompile>
+    <ClCompile Include="VEObject.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="VEObjectComponent.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="VEPhysicsComponent.cpp">
+      <Filter>Objects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="VEComponentMessage.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="VEObjectService.cpp">
+      <Filter>Services</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{d78e1d49-a89e-4fc7-b1f6-cebc66badf36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Voxel">
+      <UniqueIdentifier>{5937179a-aaad-4715-b98c-c4877a6ede17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Shaders">
+      <UniqueIdentifier>{88594070-c2bd-4b12-b45b-3b4dfbd1f37b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{c8c227fa-bb7b-4474-bbc6-fc62b1c77e7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Cameras">
+      <UniqueIdentifier>{a59f0515-8bd0-4b8a-9f82-6c6ed37d1d4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers">
+      <UniqueIdentifier>{9bfb26a4-e040-420c-85c7-2161023aa285}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External">
+      <UniqueIdentifier>{f62c3b9d-c9c5-420b-bada-6f814dde9885}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\LibNoise">
+      <UniqueIdentifier>{2527911d-35f0-44aa-b363-ec3a740f637b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Terrain">
+      <UniqueIdentifier>{6e297729-7034-450e-9ffc-3df3954f863e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{aad98302-d650-4a02-852d-cd5543858189}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\RenderManagement">
+      <UniqueIdentifier>{be317372-41b1-4622-88ae-4c61927b9f4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\DirectX11">
+      <UniqueIdentifier>{802064c1-1c06-4646-84aa-334a50c544aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Lights">
+      <UniqueIdentifier>{f19a3871-ea5e-44e5-b189-37ea7a25df6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Shaders\Deferred Rendering">
+      <UniqueIdentifier>{fdeddddf-e308-4310-8f67-1d57977cd33a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Geometry">
+      <UniqueIdentifier>{c30fd57e-edc3-45e7-b78b-ccb041d96df9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Services">
+      <UniqueIdentifier>{0fcc9daf-3b40-4ec9-842a-2dbd48096aae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{1726c0c0-d8f1-48d7-82da-41ce6269d593}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Components">
+      <UniqueIdentifier>{3652375b-1e6d-48fb-8eaa-f8e028c8bb80}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

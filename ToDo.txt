@@ -1,0 +1,29 @@
+* Improve collision detection & speed controls
+	- make sure you can't move halfway through voxels
+	- make sure sprint/walk commands properly affect jumping
+
+* replace all appropriate pointers with smart pointers
+
+* Skybox
+
+* add in a more intelligent terrain building system, something that can do tiered terrain - looking at surrounding chunks to decide what to make next
+
+* Memory pooling http://en.wikipedia.org/wiki/Memory_pool
+
+* shadow maps
+	http://www.gamedev.net/page/resources/_/technical/graphics-programming-and-theory/soft-edged-shadows-r2193
+	- implement lighting for point lights (cube maps http://http.developer.nvidia.com/GPUGems/gpugems_ch12.html http://www.braynzarsoft.net/index.php?p=D3D11CUBEMAP)
+	- soft shadows
+
+* improve terrain generation
+	- colour map for voxel types (currently a default grass colour is used in the chunk thread)
+	- map different colours to voxels at different heights
+
+* height map generation should be moved in to a separate thread
+
+* Add a class that can log messages to a file, keep an instance in the engine for error messages etc
+
+* add the ability to turn features on/off in the render manager
+	- lighting
+	- shadows
+	- ssao

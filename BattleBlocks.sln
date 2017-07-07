@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BattleBlocks", "BattleBlocks\BattleBlocks.vcxproj", "{B923979F-2E6A-4093-9B0B-1EC197FD56CC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AFDDD1BA-B2CA-4B40-A054-07DC01FC605E} = {AFDDD1BA-B2CA-4B40-A054-07DC01FC605E}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{45F5554C-36EB-4D5E-8D32-7CBEAE36B4C5}"
+	ProjectSection(SolutionItems) = preProject
+		BattleBlocks.txt = BattleBlocks.txt
+		ToDo.txt = ToDo.txt
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VoxelEngine", "VoxelEngine\VoxelEngine.vcxproj", "{AFDDD1BA-B2CA-4B40-A054-07DC01FC605E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B923979F-2E6A-4093-9B0B-1EC197FD56CC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B923979F-2E6A-4093-9B0B-1EC197FD56CC}.Debug|Win32.Build.0 = Debug|Win32
+		{B923979F-2E6A-4093-9B0B-1EC197FD56CC}.Release|Win32.ActiveCfg = Release|Win32
+		{B923979F-2E6A-4093-9B0B-1EC197FD56CC}.Release|Win32.Build.0 = Release|Win32
+		{AFDDD1BA-B2CA-4B40-A054-07DC01FC605E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AFDDD1BA-B2CA-4B40-A054-07DC01FC605E}.Debug|Win32.Build.0 = Debug|Win32
+		{AFDDD1BA-B2CA-4B40-A054-07DC01FC605E}.Release|Win32.ActiveCfg = Release|Win32
+		{AFDDD1BA-B2CA-4B40-A054-07DC01FC605E}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

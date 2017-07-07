@@ -1,0 +1,49 @@
+/////////////////////////////////////////////////
+// A pixel shader that renders voxel chunks
+/////////////////////////////////////////////////
+
+
+// ---------------- Structs -----------------
+
+// Pixel shader input
+struct PixelShaderInput
+{
+	float4 myPosition 	: SV_POSITION;
+	float4 myColour 	: TEXCOORD0;
+	float3 myNormal		: TEXCOORD1;
+};
+
+
+// ---------------- Constants ---------------
+
+// Lighting constants, the padding is to make sure the 
+// size of the buffer is a multiple of 16
+cbuffer LightingBuffer
+{
+    float4 myAmbientColour;
+	float4 myDiffuseColour;
+	float3 myLightDirection;
+	float  myPadding;
+};
+
+
+// ----------------- Shader ------------------
+
+// Just returns the colour
+float4 PS( PixelShaderInput anInput ) : SV_TARGET
+{
+	float4 colour = myAmbientColour;
+	
+	// To what degree does the diffuse light affect the current pixel
+	float lightIntensity = saturate( dot(anInput.myNormal, -myLightDirection) );
+	if( lightIntensity > 0.0f )
+	{
+		colour += saturate( myDiffuseColour * lightIntensity );
+	}
+	
+	// Make sure our colour value ranges between 0 and 1
+	colour = saturate( colour );
+	
+	// Return the pixel colour with the lighting applied
+	return colour * anInput.myColour;
+}

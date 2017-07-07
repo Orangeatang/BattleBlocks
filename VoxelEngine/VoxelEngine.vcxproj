@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{AFDDD1BA-B2CA-4B40-A054-07DC01FC605E}</ProjectGuid>
+    <RootNamespace>VoxelEngine</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)\Bin\VoxelEngine\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\Obj\VoxelEngine\$(Configuration)\</IntDir>
+    <IncludePath>$(MSBuildProgramFiles32)\Windows Kits\8.0\Include\shared;$(MSBuildProgramFiles32)\Windows Kits\8.0\Include\um;$(MSBuildProgramFiles32)\Windows Kits\8.0\Include\WinRT;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(FrameworkSDKDir)\include;$(SolutionDir)\Libs\LibNoise\include;$(SolutionDir)\Libs\DirectXTK\include</IncludePath>
+    <LibraryPath>
+    </LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)\Bin\VoxelEngine\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\Obj\VoxelEngine\$(Configuration)\</IntDir>
+    <IncludePath>$(MSBuildProgramFiles32)\Windows Kits\8.0\Include\shared;$(MSBuildProgramFiles32)\Windows Kits\8.0\Include\um;$(MSBuildProgramFiles32)\Windows Kits\8.0\Include\WinRT;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(FrameworkSDKDir)\include;$(SolutionDir)\Libs\LibNoise\include;$(SolutionDir)\Libs\DirectXTK\include</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>Stdafx.h</PrecompiledHeaderFile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>nafxcw.lib</IgnoreSpecificDefaultLibraries>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>nafxcw.lib</IgnoreSpecificDefaultLibraries>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="noiseutils.h" />
+    <ClInclude Include="Stdafx.h" />
+    <ClInclude Include="VEBasicCamera.h" />
+    <ClInclude Include="VEChunk.h" />
+    <ClInclude Include="VEChunkData.h" />
+    <ClInclude Include="VEChunkManager.h" />
+    <ClInclude Include="VEClearGBufferShader.h" />
+    <ClInclude Include="VEComponentMessage.h" />
+    <ClInclude Include="VEDirectionalLightShader.h" />
+    <ClInclude Include="VEFinalBlendShader.h" />
+    <ClInclude Include="VEGeometryShader.h" />
+    <ClInclude Include="VEObject.h" />
+    <ClInclude Include="VEObjectComponent.h" />
+    <ClInclude Include="VEObjectService.h" />
+    <ClInclude Include="VEPhysicsComponent.h" />
+    <ClInclude Include="VEPhysicsService.h" />
+    <ClInclude Include="VEPointLightShader.h" />
+    <ClInclude Include="VEDeferredRenderManager.h" />
+    <ClInclude Include="VEShaderManager.h" />
+    <ClInclude Include="VEShadowMapShader.h" />
+    <ClInclude Include="VESmartPointer.h" />
+    <ClInclude Include="VESpotLightShader.h" />
+    <ClInclude Include="VEDirectionalLight.h" />
+    <ClInclude Include="VEDirectXInput.h" />
+    <ClInclude Include="VEDirectXInterface.h" />
+    <ClInclude Include="VEFirstPersonCamera.h" />
+    <ClInclude Include="VEFreeCamera.h" />
+    <ClInclude Include="VELight.h" />
+    <ClInclude Include="VELightingManager.h" />
+    <ClInclude Include="VEPointLight.h" />
+    <ClInclude Include="VEQuadRenderer.h" />
+    <ClInclude Include="VERenderManager.h" />
+    <ClInclude Include="VESphere.h" />
+    <ClInclude Include="VESpotLight.h" />
+    <ClInclude Include="VESSAOShader.h" />
+    <ClInclude Include="VETextureManager.h" />
+    <ClInclude Include="VEThreadManager.h" />
+    <ClInclude Include="VETypes.h" />
+    <ClInclude Include="VEShader.h" />
+    <ClInclude Include="VETerrainGenerator.h" />
+    <ClInclude Include="VEVoxel.h" />
+    <ClInclude Include="VEVoxelRenderManager.h" />
+    <ClInclude Include="VEVoxelShader.h" />
+    <ClInclude Include="VoxelEngine.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="noiseutils.cpp" />
+    <ClCompile Include="Stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="VEBasicCamera.cpp" />
+    <ClCompile Include="VEChunk.cpp" />
+    <ClCompile Include="VEChunkData.cpp" />
+    <ClCompile Include="VEChunkManager.cpp" />
+    <ClCompile Include="VEClearGBufferShader.cpp" />
+    <ClCompile Include="VEComponentMessage.cpp" />
+    <ClCompile Include="VEDirectionalLightShader.cpp" />
+    <ClCompile Include="VEFinalBlendShader.cpp" />
+    <ClCompile Include="VEGeometryShader.cpp" />
+    <ClCompile Include="VEObject.cpp" />
+    <ClCompile Include="VEObjectComponent.cpp" />
+    <ClCompile Include="VEObjectService.cpp" />
+    <ClCompile Include="VEPhysicsComponent.cpp" />
+    <ClCompile Include="VEPhysicsService.cpp" />
+    <ClCompile Include="VEPointLightShader.cpp" />
+    <ClCompile Include="VEDeferredRenderManager.cpp" />
+    <ClCompile Include="VEShaderManager.cpp" />
+    <ClCompile Include="VEShadowMapShader.cpp" />
+    <ClCompile Include="VESpotLightShader.cpp" />
+    <ClCompile Include="VEDirectionalLight.cpp" />
+    <ClCompile Include="VEDirectXInput.cpp" />
+    <ClCompile Include="VEDirectXInterface.cpp" />
+    <ClCompile Include="VEFirstPersonCamera.cpp" />
+    <ClCompile Include="VEFreeCamera.cpp" />
+    <ClCompile Include="VELightingManager.cpp" />
+    <ClCompile Include="VEPointLight.cpp" />
+    <ClCompile Include="VEQuadRenderer.cpp" />
+    <ClCompile Include="VEShader.cpp" />
+    <ClCompile Include="VESphere.cpp" />
+    <ClCompile Include="VESpotLight.cpp" />
+    <ClCompile Include="VESSAOShader.cpp" />
+    <ClCompile Include="VETerrainGenerator.cpp" />
+    <ClCompile Include="VETextureManager.cpp" />
+    <ClCompile Include="VEThreadManager.cpp" />
+    <ClCompile Include="VEVoxel.cpp" />
+    <ClCompile Include="VEVoxelRenderManager.cpp" />
+    <ClCompile Include="VEVoxelShader.cpp" />
+    <ClCompile Include="VoxelEngine.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
